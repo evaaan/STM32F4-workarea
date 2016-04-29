@@ -75,28 +75,12 @@ int main(void)
   RCC_GetClocksFreq(&RCC_Clocks);
   SysTick_Config(RCC_Clocks.HCLK_Frequency / 100);
   
-  /* Initialize LEDs and LCD available on EVAL board **************************/
+  /* Initialize LEDs available on EVAL board **************************/
   STM_EVAL_LEDInit(LED1);
   STM_EVAL_LEDInit(LED2);
   STM_EVAL_LEDInit(LED3);
   STM_EVAL_LEDInit(LED4);  
-  /* Initialize the LCD */
-  LCD_Init();
 
-  /* Display message on LCD ***************************************************/
-  
-  /* Clear the Foreground Layer */ 
-  LCD_Clear(LCD_COLOR_WHITE);
-  
-  /* Set the LCD Back Color */
-  LCD_SetBackColor(LCD_COLOR_WHITE);
-  /* Set the LCD Text Color */
-  LCD_SetTextColor(LCD_COLOR_BLUE);
-  
-  /* Display LCD messages */
-  LCD_DisplayStringLine(LCD_LINE_3, (uint8_t *)MESSAGE1);
-  LCD_DisplayStringLine(LCD_LINE_4, (uint8_t *)MESSAGE2);
-  LCD_DisplayStringLine(LCD_LINE_5, (uint8_t *)MESSAGE3);
 
   /* Turn on LEDs *************************************************************/
   STM_EVAL_LEDOn(LED1);

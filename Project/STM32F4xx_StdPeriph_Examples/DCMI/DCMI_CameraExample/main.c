@@ -86,14 +86,15 @@ int main(void)
   STM_EVAL_LEDInit(LED4);
 
   STM_EVAL_LEDOn(LED1);
+  STM_EVAL_LEDOn(LED3);
 
  /* Initialize the LCD */
-  LCD_Init();
-  LCD_Clear(Black);
-  LCD_SetTextColor(White);
+  //LCD_Init();
+  //LCD_Clear(Black);
+  //LCD_SetTextColor(White);
 
-  LCD_LOG_SetHeader((uint8_t*)"STM32 Camera Demo");
-  LCD_LOG_SetFooter ((uint8_t*)"   Copyright (c) STMicroelectronics" );
+  //LCD_LOG_SetHeader((uint8_t*)"STM32 Camera Demo");
+  //LCD_LOG_SetFooter ((uint8_t*)"   Copyright (c) STMicroelectronics" );
 
   /* ADC configuration */
   ADC_Config();
@@ -119,26 +120,26 @@ int main(void)
   }
   else
   {
-    LCD_SetTextColor(LCD_COLOR_RED);
-    LCD_DisplayStringLine(LINE(4), (uint8_t*)"Check the Camera HW and try again");
+    //LCD_SetTextColor(LCD_COLOR_RED);
+    //LCD_DisplayStringLine(LINE(4), (uint8_t*)"Check the Camera HW and try again");
     while(1);  
   }
 
-  LCD_SetTextColor(LCD_COLOR_YELLOW);
-  LCD_DisplayStringLine(LINE(4), (uint8_t*)abuffer);
-  LCD_SetTextColor(LCD_COLOR_WHITE);
+  //LCD_SetTextColor(LCD_COLOR_YELLOW);
+  //LCD_DisplayStringLine(LINE(4), (uint8_t*)abuffer);
+  //LCD_SetTextColor(LCD_COLOR_WHITE);
   Delay(200);
 
   /* Initialize demo */
   ImageFormat = (ImageFormat_TypeDef)Demo_Init();
 
   /* Configure the Camera module mounted on STM324xG-EVAL/STM324x7I-EVAL boards */
-  Demo_LCD_Clear();
-  LCD_DisplayStringLine(LINE(4), (uint8_t*)"Camera Init..               ");
+  //Demo_LCD_Clear();
+  //LCD_DisplayStringLine(LINE(4), (uint8_t*)"Camera Init..               ");
   Camera_Config();
 
   sprintf((char*)abuffer, " Image selected: %s", ImageForematArray[ImageFormat]);
-  LCD_DisplayStringLine(LINE(4),(uint8_t*)abuffer);
+  //LCD_DisplayStringLine(LINE(4),(uint8_t*)abuffer);
 
   /* Enable DMA2 stream 1 and DCMI interface then start image capture */
   DMA_Cmd(DMA2_Stream1, ENABLE); 
@@ -149,22 +150,22 @@ int main(void)
 
   DCMI_CaptureCmd(ENABLE); 
 
-  LCD_ClearLine(LINE(4));
-  Demo_LCD_Clear();
+  //LCD_ClearLine(LINE(4));
+  //Demo_LCD_Clear();
 
   if(ImageFormat == BMP_QQVGA)
   {
     /* LCD Display window */
-    LCD_SetDisplayWindow(179, 239, 120, 160);
-    LCD_WriteReg(LCD_REG_3, 0x1038);
-    LCD_WriteRAM_Prepare(); 
+    //LCD_SetDisplayWindow(179, 239, 120, 160);
+    //LCD_WriteReg(LCD_REG_3, 0x1038);
+    //LCD_WriteRAM_Prepare(); 
   }
   else if(ImageFormat == BMP_QVGA)
   {
     /* LCD Display window */
-    LCD_SetDisplayWindow(239, 319, 240, 320);
-    LCD_WriteReg(LCD_REG_3, 0x1038);
-    LCD_WriteRAM_Prepare(); 
+    //LCD_SetDisplayWindow(239, 319, 240, 320);
+    //LCD_WriteReg(LCD_REG_3, 0x1038);
+    //LCD_WriteRAM_Prepare(); 
   }
 
   while(1)
@@ -179,11 +180,11 @@ int main(void)
     Delay(10);
 
     /* Get the last ADC3 conversion result data */
-    uhADCVal = ADC_GetConversionValue(ADC3);
+    //uhADCVal = ADC_GetConversionValue(ADC3);
     
     /* Change the Brightness of camera using "Brightness Adjustment" register:
        For OV9655 camera Brightness can be positively (0x01 ~ 0x7F) and negatively (0x80 ~ 0xFF) adjusted
-       For OV2640 camera Brightness can be positively (0x20 ~ 0x40) and negatively (0 ~ 0x20) adjusted */
+       For OV2640 camera Brightness can be positively (0x20 ~ 0x40) and negatively (0 ~ 0x20) adjusted 
     if(Camera == OV9655_CAMERA)
     {
       OV9655_BrightnessConfig(uhADCVal);
@@ -191,7 +192,7 @@ int main(void)
     if(Camera == OV2640_CAMERA)
     {
       OV2640_BrightnessConfig(uhADCVal/2);
-    }
+    } */
   }
 }
 
