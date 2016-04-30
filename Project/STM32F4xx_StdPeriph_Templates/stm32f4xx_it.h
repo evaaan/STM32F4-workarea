@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Project/STM32F4xx_StdPeriph_Templates/stm32f4xx_it.h 
+  * @file    DCMI/DCMI_CameraExample/stm32f4xx_it.h 
   * @author  MCD Application Team
   * @version V1.1.0
   * @date    18-January-2013
@@ -50,6 +50,12 @@ void SVC_Handler(void);
 void DebugMon_Handler(void);
 void PendSV_Handler(void);
 void SysTick_Handler(void);
+void SDIO_IRQHandler(void);
+void SD_SDIO_DMA_IRQHANDLER(void);
+void DCMI_IRQHandler(void);
+void DMA2_Stream1_IRQHandler(void);
+void EXTI15_10_IRQHandler(void);
+void EXTI2_IRQHandler(void);
 
 #ifdef __cplusplus
 }

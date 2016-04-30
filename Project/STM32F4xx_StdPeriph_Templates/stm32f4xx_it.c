@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Project/STM32F4xx_StdPeriph_Template/stm32f4xx_it.c 
+  * @file    DCMI/DCMI_CameraExample/stm32f4xx_it.c 
   * @author  MCD Application Team
   * @version V1.1.0
   * @date    18-January-2013
@@ -30,14 +30,20 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
 
-/** @addtogroup Template_Project
+/** @addtogroup STM32F4xx_StdPeriph_Examples
   * @{
   */
+
+/** @addtogroup DCMI_CameraExample
+  * @{
+  */ 
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+extern __IO uint32_t PressedKey;
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -151,17 +157,74 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief  This function handles PPP interrupt request.
+  * @brief  This function handles External line 10 interrupt request.
   * @param  None
   * @retval None
   */
-/*void PPP_IRQHandler(void)
+void EXTI2_IRQHandler(void)
 {
-}*/
+  static JOY_State_TypeDef JoyState = JOY_NONE;
+
+  if(EXTI_GetITStatus(IOE_IT_EXTI_LINE) != RESET)
+  {
+    if(IOE_GetGITStatus(IOE_2_ADDR, IOE_GIT_GPIO))
+    {
+      /* Get the Joystick State */
+      JoyState = IOE_JoyStickGetState();
+      
+      switch (JoyState)
+      {
+        case JOY_NONE:
+        break;
+        
+        case JOY_UP:
+        {
+          PressedKey =  UP;     
+          break;        
+        } 
+        case JOY_DOWN:
+        {
+          PressedKey =  DOWN;
+          break;    
+        }
+        case JOY_RIGHT :
+        {
+          PressedKey =  JOY_NONE;
+          break;    
+        }
+        case JOY_LEFT:
+        {
+          PressedKey =  JOY_NONE;
+          break;    
+        }         
+        case JOY_CENTER:
+        {
+          PressedKey =  SEL;
+          break;    
+        }
+        default:
+        {
+          PressedKey =  JOY_NONE; 
+          LCD_DisplayStringLine(LINE(17), (uint8_t*)"     JOY  ERROR     ");
+          break;           
+        }
+      } 
+    }
+    /* Clear the interrupt pending bits */    
+    IOE_ClearGITPending(IOE_2_ADDR, IOE_GIT_GPIO);
+    IOE_ClearIOITPending(IOE_2_ADDR, IOE_JOY_IT);  
+  }
+  /* Clear interrupt pending bit */
+  EXTI_ClearITPendingBit(IOE_IT_EXTI_LINE);
+}
+
 
 /**
   * @}
   */ 
 
+/**
+  * @}
+  */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

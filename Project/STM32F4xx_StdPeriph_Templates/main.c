@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Project/STM32F4xx_StdPeriph_Templates/main.c 
+  * @file    DCMI/DCMI_CameraExample/main.c 
   * @author  MCD Application Team
   * @version V1.1.0
   * @date    18-January-2013
@@ -27,37 +27,41 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dcmi_ov9655.h"
+#include "dcmi_ov2640.h"
+#include  "lcd_log.h"
 
-/** @addtogroup STM32F4xx_StdPeriph_Templates
+/** @addtogroup STM32F4xx_StdPeriph_Examples
+  * @{
+  */
+
+/** @addtogroup DCMI_CameraExample
   * @{
   */ 
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-
-#if defined (USE_STM324xG_EVAL)
-  #define MESSAGE1   "     STM32F40xx     "
-  #define MESSAGE2   " Device running on  " 
-  #define MESSAGE3   "   STM324xG-EVAL    "
-
-#else /* USE_STM324x7I_EVAL */ 
-  #define MESSAGE1   "     STM32F427x     "
-  #define MESSAGE2   " Device running on  " 
-  #define MESSAGE3   "  STM324x7I-EVAL    "
-#endif 
-
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-static __IO uint32_t uwTimingDelay;
-RCC_ClocksTypeDef    RCC_Clocks;
+RCC_ClocksTypeDef RCC_Clocks;
+OV9655_IDTypeDef  OV9655_Camera_ID;
+OV2640_IDTypeDef  OV2640_Camera_ID;
+
+__IO uint16_t  uhADCVal = 0;
+uint8_t        abuffer[40];
+
+extern Camera_TypeDef       Camera;
+extern ImageFormat_TypeDef  ImageFormat;
+extern __IO uint8_t         ValueMax;
+extern const uint8_t *      ImageForematArray[];
 
 /* Private function prototypes -----------------------------------------------*/
-static void Delay(__IO uint32_t nTime);
+//static void ADC_Config(void);
 
 /* Private functions ---------------------------------------------------------*/
 
 /**
-  * @brief   Main program
+  * @brief  Main program.
   * @param  None
   * @retval None
   */
@@ -69,82 +73,153 @@ int main(void)
        application main. 
        To reconfigure the default setting of SystemInit() function, refer to
        system_stm32f4xx.c file
-     */  
+     */
 
   /* SysTick end of count event each 10ms */
   RCC_GetClocksFreq(&RCC_Clocks);
   SysTick_Config(RCC_Clocks.HCLK_Frequency / 100);
-  
-  /* Initialize LEDs available on EVAL board **************************/
+
+  /* Initialize LEDs and push-buttons mounted on STM324xG-EVAL/STM324x7I-EVAL boards */
   STM_EVAL_LEDInit(LED1);
   STM_EVAL_LEDInit(LED2);
   STM_EVAL_LEDInit(LED3);
-  STM_EVAL_LEDInit(LED4);  
+  STM_EVAL_LEDInit(LED4);
 
-
-  /* Turn on LEDs *************************************************************/
   STM_EVAL_LEDOn(LED1);
-  STM_EVAL_LEDOn(LED2);
   STM_EVAL_LEDOn(LED3);
-  STM_EVAL_LEDOn(LED4);
 
-  /* Add your application code here */
-    
-  /* Infinite loop */
-  while (1)
+  /* ADC configuration */
+  //ADC_Config();
+
+  /* Initializes the DCMI interface (I2C and GPIO) used to configure the camera */
+  OV2640_HW_Init();
+
+  /* Read the OV9655/OV2640 Manufacturer identifier */
+  OV9655_ReadID(&OV9655_Camera_ID);
+  OV2640_ReadID(&OV2640_Camera_ID);
+
+  if(OV9655_Camera_ID.PID  == 0x96)
   {
-    /* Toggle LD1 */
-    STM_EVAL_LEDToggle(LED1);
-    /* Insert 50 ms delay */
-    Delay(5);
-
-    /* Toggle LD2 */
-    STM_EVAL_LEDToggle(LED2);
-    /* Insert 50 ms delay */
-    Delay(5);
+    Camera = OV9655_CAMERA;
+    sprintf((char*)abuffer, "OV9655 Camera ID 0x%x", OV9655_Camera_ID.PID);
+    ValueMax = 2;
+  }
+  else if(OV2640_Camera_ID.PIDH  == 0x26)
+  {
+    Camera = OV2640_CAMERA;
+    sprintf((char*)abuffer, "OV2640 Camera ID 0x%x", OV2640_Camera_ID.PIDH);
+    ValueMax = 2;
+  }
+  else
+  {
     
-    /* Toggle LD3 */
-    STM_EVAL_LEDToggle(LED3);
-    /* Insert 50 ms delay */
-    Delay(5);
+    //while(1);  
+  }
 
-    /* Toggle LD4 */    
+
+  //Delay(20);
+
+  /* Initialize demo */
+//  ImageFormat = (ImageFormat_TypeDef)Demo_Init();
+
+  /* Configure the Camera module mounted on STM324xG-EVAL/STM324x7I-EVAL boards */
+  Camera_Config();
+
+
+  /* Enable DMA2 stream 1 and DCMI interface then start image capture */
+  DMA_Cmd(DMA2_Stream1, ENABLE); 
+  DCMI_Cmd(ENABLE); 
+
+  /* Insert 100ms delay: wait 100ms */
+  //Delay(200); 
+
+  DCMI_CaptureCmd(ENABLE); 
+
+  //LCD_ClearLine(LINE(4));
+  //Demo_LCD_Clear();
+
+  while(1)
+  {
+    /* Blink LD1, LED2 and LED4 */
+    STM_EVAL_LEDToggle(LED1);
+    STM_EVAL_LEDToggle(LED2);
+    STM_EVAL_LEDToggle(LED3);
     STM_EVAL_LEDToggle(LED4);
-    /* Insert 50 ms delay */
-    Delay(5);
+
+    /* Insert 100ms delay */
+    Delay(10);
+
+    /* Get the last ADC3 conversion result data */
+    //uhADCVal = ADC_GetConversionValue(ADC3);
+    
+    /* Change the Brightness of camera using "Brightness Adjustment" register:
+       For OV9655 camera Brightness can be positively (0x01 ~ 0x7F) and negatively (0x80 ~ 0xFF) adjusted
+       For OV2640 camera Brightness can be positively (0x20 ~ 0x40) and negatively (0 ~ 0x20) adjusted 
+    if(Camera == OV9655_CAMERA)
+    {
+      OV9655_BrightnessConfig(uhADCVal);
+    }
+    if(Camera == OV2640_CAMERA)
+    {
+      OV2640_BrightnessConfig(uhADCVal/2);
+    } */
   }
 }
 
 /**
-  * @brief  Inserts a delay time.
-  * @param  nTime: specifies the delay time length, in milliseconds.
-  * @retval None
-  */
-void Delay(__IO uint32_t nTime)
-{ 
-  uwTimingDelay = nTime;
-
-  while(uwTimingDelay != 0);
-}
-
-/**
-  * @brief  Decrements the TimingDelay variable.
+  * @brief  Configures the ADC.
   * @param  None
   * @retval None
   */
-void TimingDelay_Decrement(void)
+static void ADC_Config(void)
 {
-  if (uwTimingDelay != 0x00)
-  { 
-    uwTimingDelay--;
-  }
+  ADC_InitTypeDef ADC_InitStructure;
+  ADC_CommonInitTypeDef ADC_CommonInitStructure;
+  GPIO_InitTypeDef GPIO_InitStructure;
+
+  /* Enable ADC3 clock */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC3, ENABLE);
+
+  /* GPIOF clock enable */
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE); 
+
+  /* Configure ADC Channel7 as analog */
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9; 
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+  GPIO_Init(GPIOF, &GPIO_InitStructure);
+
+  /* ADC Common Init */
+  ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
+  ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div6;
+  ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
+  ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles; 
+  ADC_CommonInit(&ADC_CommonInitStructure); 
+
+  /* ADC3 Configuration ------------------------------------------------------*/
+  ADC_StructInit(&ADC_InitStructure);
+  ADC_InitStructure.ADC_Resolution = ADC_Resolution_8b;
+  ADC_InitStructure.ADC_ScanConvMode = DISABLE;
+  ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
+  ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None; 
+  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+  ADC_InitStructure.ADC_NbrOfConversion = 1;
+  ADC_Init(ADC3, &ADC_InitStructure);
+
+  /* ADC3 Regular Channel Config */
+  ADC_RegularChannelConfig(ADC3, ADC_Channel_7, 1, ADC_SampleTime_56Cycles);
+
+  /* Enable ADC3 */
+  ADC_Cmd(ADC3, ENABLE);
+
+  /* ADC3 regular Software Start Conv */ 
+  ADC_SoftwareStartConv(ADC3);
 }
 
 #ifdef  USE_FULL_ASSERT
-
 /**
   * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
+  *   where the assert_param error has occurred.
   * @param  file: pointer to the source file name
   * @param  line: assert_param error line source number
   * @retval None
@@ -163,7 +238,10 @@ void assert_failed(uint8_t* file, uint32_t line)
 
 /**
   * @}
-  */
+  */ 
 
+/**
+  * @}
+  */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Project/STM32F4xx_StdPeriph_Templates/main.h 
+  * @file    DCMI/DCMI_CameraExample/main.h 
   * @author  MCD Application Team
   * @version V1.1.0
   * @date    18-January-2013
@@ -30,15 +30,17 @@
 #define __MAIN_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx.h"
+#include "camera_api.h"
 
 #if defined (USE_STM324xG_EVAL)
   #include "stm324xg_eval.h"
   #include "stm324xg_eval_lcd.h"
+  #include "stm324xg_eval_ioe.h"
 
 #elif defined (USE_STM324x7I_EVAL) 
   #include "stm324x7i_eval.h"
   #include "stm324x7i_eval_lcd.h"
+  #include "stm324x7i_eval_ioe.h"
 
 #else
  #error "Please select first the Evaluation board used in your application (in Project Options)"
@@ -48,7 +50,6 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-void TimingDelay_Decrement(void);
 
 #endif /* __MAIN_H */
 

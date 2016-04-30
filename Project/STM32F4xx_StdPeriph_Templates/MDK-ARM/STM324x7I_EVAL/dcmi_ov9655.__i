@@ -1,0 +1,5 @@
+-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I..\ -I..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I..\..\..\Utilities\STM32_EVAL\Common -I..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL 
+-I C:\Keil\ARM\RV31\INC 
+-I C:\Keil\ARM\CMSIS\Include 
+-I C:\Keil\ARM\Inc\ST\STM32F4xx 
+-DUSE_STM324x7I_EVAL -DSTM32F427X -DUSE_STDPERIPH_DRIVER -o ".\STM324x7I_EVAL\dcmi_ov9655.o" --omf_browse ".\STM324x7I_EVAL\dcmi_ov9655.crf" --depend ".\STM324x7I_EVAL\dcmi_ov9655.d" "..\dcmi_ov9655.c"

@@ -1,0 +1,19 @@
+OV2640 DCMI Pins for STM32F Discovery Board
+
+
+D0 - 	PC6
+D1 - 	PC7
+D2 - 	PC8
+D3 - 	PC9
+D4 - 	PC11
+D5 - 	PB6
+D6 - 	PE5
+D7 - 	PE6
+HSYNC - PA4
+VSYNC - PB7
+PCLK - 	PA6
+PWDN (power down, active high, internal pull down, can be disconnected)
+RES (reset, can be disconnected, active low, internal pull-up)
+XCLK 	PA8	(6-24MHz MCO1)
+SIO_C - PB8 (i2c1)
+SIO_D - PB9 (i2c1)

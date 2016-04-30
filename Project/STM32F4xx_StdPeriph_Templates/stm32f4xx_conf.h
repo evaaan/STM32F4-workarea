@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Project/STM32F4xx_StdPeriph_Templates/stm32f4xx_conf.h  
+  * @file    DCMI/DCMI_CameraExample/stm32f4xx_conf.h  
   * @author  MCD Application Team
   * @version V1.1.0
   * @date    18-January-2013
