@@ -49,7 +49,9 @@ OV2640_IDTypeDef  OV2640_Camera_ID;
 
 __IO uint16_t  uhADCVal = 0;
 uint8_t        abuffer[40];
-
+uint8_t ret_val = 0x56;
+FlagStatus fstatus = RESET;
+ITStatus itstatus = RESET;
 extern Camera_TypeDef       Camera;
 extern ImageFormat_TypeDef  ImageFormat;
 extern __IO uint8_t         ValueMax;
@@ -92,22 +94,24 @@ int main(void)
   //ADC_Config();
 
   /* Initializes the DCMI interface (I2C and GPIO) used to configure the camera */
-  OV2640_HW_Init();
-
+  //OV29655_HW_Init();
+	Delay(20);
   /* Read the OV9655/OV2640 Manufacturer identifier */
-  OV9655_ReadID(&OV9655_Camera_ID);
-  OV2640_ReadID(&OV2640_Camera_ID);
+  //OV9655_ReadID(&OV9655_Camera_ID);
+  //OV2640_ReadID(&OV2640_Camera_ID);
 
+	Camera = OV9655_CAMERA;
+	/* 
   if(OV9655_Camera_ID.PID  == 0x96)
   {
     Camera = OV9655_CAMERA;
-    sprintf((char*)abuffer, "OV9655 Camera ID 0x%x", OV9655_Camera_ID.PID);
+    //sprintf((char*)abuffer, "OV9655 Camera ID 0x%x", OV9655_Camera_ID.PID);
     ValueMax = 2;
   }
   else if(OV2640_Camera_ID.PIDH  == 0x26)
   {
     Camera = OV2640_CAMERA;
-    sprintf((char*)abuffer, "OV2640 Camera ID 0x%x", OV2640_Camera_ID.PIDH);
+    //sprintf((char*)abuffer, "OV2640 Camera ID 0x%x", OV2640_Camera_ID.PIDH);
     ValueMax = 2;
   }
   else
@@ -115,9 +119,10 @@ int main(void)
     
     //while(1);  
   }
+	*/
 
 
-  //Delay(20);
+  Delay(20);
 
   /* Initialize demo */
 //  ImageFormat = (ImageFormat_TypeDef)Demo_Init();
@@ -125,18 +130,25 @@ int main(void)
   /* Configure the Camera module mounted on STM324xG-EVAL/STM324x7I-EVAL boards */
   Camera_Config();
 
+	Delay(20);
 
   /* Enable DMA2 stream 1 and DCMI interface then start image capture */
   DMA_Cmd(DMA2_Stream1, ENABLE); 
+	Delay(20);
   DCMI_Cmd(ENABLE); 
 
   /* Insert 100ms delay: wait 100ms */
-  //Delay(200); 
+  Delay(20); 
 
   DCMI_CaptureCmd(ENABLE); 
 
   //LCD_ClearLine(LINE(4));
   //Demo_LCD_Clear();
+	
+	// lets try writing to and reading from a register
+	if (Camera == OV9655_CAMERA) {
+		ret_val = OV9655_ReadReg(OV9655_COM10);
+	}
 
   while(1)
   {
@@ -144,8 +156,12 @@ int main(void)
     STM_EVAL_LEDToggle(LED1);
     STM_EVAL_LEDToggle(LED2);
     STM_EVAL_LEDToggle(LED3);
-    STM_EVAL_LEDToggle(LED4);
-
+    //STM_EVAL_LEDToggle(LED4);
+		itstatus = DCMI_GetITStatus(DCMI_IT_FRAME);
+		fstatus = DCMI_GetFlagStatus(DCMI_FLAG_FRAMERI);
+		if ((itstatus == SET) || (fstatus == SET)) {
+			Delay(100);//catch here
+		}
     /* Insert 100ms delay */
     Delay(10);
 

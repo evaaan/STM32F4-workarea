@@ -59,6 +59,7 @@ static unsigned char OV9655_QQVGA[][2]=
   0x12, 0x62,
   0x13, 0xc7,
   0x14, 0x3a,
+	0x15, 0x00, // COM10
   0x16, 0x24,
   0x17, 0x18,
   0x18, 0x04,
@@ -195,9 +196,9 @@ static unsigned char OV9655_QQVGA[][2]=
   0xcc, 0xd8,
   0xcd, 0x93,
 
-  0x12, 0x63,
-  0x40, 0x10,
-  0x15, 0x08,
+  //0x12, 0x63,
+  //0x40, 0x10,
+ // 0x15, 0x08,
 };
 
 /* QVGA 360x240 */
@@ -351,8 +352,7 @@ static unsigned char OV9655_QVGA[][2]=
   0xcb, 0xf0,
   0xcc, 0xd8,
   0xcd, 0x93,
-
-  0x12, 0x63,
+	0x12, 0x63,
   0x40, 0x10,
   0x15, 0x08,
 };
@@ -415,10 +415,10 @@ void OV9655_HW_Init(void)
   GPIO_Init(GPIOE, &GPIO_InitStructure);
 
 	
-	/* XCLK(PA8) - MCO 16MHz no divider */
+	/* XCLK(PA8) - MCO 8MHz, 2x divider */
   //GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   //GPIO_Init(GPIOA, &GPIO_InitStructure);
-	RCC_MCO1Config(RCC_MCO1Source_HSI, RCC_MCO1Div_1);
+	RCC_MCO1Config(RCC_MCO1Source_HSI, RCC_MCO1Div_2);
 
   /****** Configures the I2C1 used for OV2640 camera module configuration *****/
  /* I2C1 clock enable */
@@ -428,15 +428,15 @@ void OV9655_HW_Init(void)
   //RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
   /* Connect I2C1 pins to AF4 */
+  GPIO_PinAFConfig(GPIOB, GPIO_PinSource8, GPIO_AF_I2C1);
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource9, GPIO_AF_I2C1);
-  GPIO_PinAFConfig(GPIOB, GPIO_PinSource6, GPIO_AF_I2C1);
   
   /* Configure I2C1 GPIOs */  
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
 
   /* Configure I2C1 */
@@ -448,7 +448,7 @@ void OV9655_HW_Init(void)
  
   /* Set the I2C structure parameters */
   I2C_InitStruct.I2C_Mode = I2C_Mode_I2C;
-  I2C_InitStruct.I2C_DutyCycle = I2C_DutyCycle_2;
+  I2C_InitStruct.I2C_DutyCycle = I2C_DutyCycle_2; // 50% duty
   I2C_InitStruct.I2C_OwnAddress1 = 0xFE;
   I2C_InitStruct.I2C_Ack = I2C_Ack_Enable;
   I2C_InitStruct.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
@@ -499,9 +499,9 @@ void OV9655_Init(ImageFormat_TypeDef ImageFormat)
   /* DCMI configuration */ 
   DCMI_InitStructure.DCMI_CaptureMode = DCMI_CaptureMode_Continuous;
   DCMI_InitStructure.DCMI_SynchroMode = DCMI_SynchroMode_Hardware;
-  DCMI_InitStructure.DCMI_PCKPolarity = DCMI_PCKPolarity_Falling;
-  DCMI_InitStructure.DCMI_VSPolarity = DCMI_VSPolarity_High;
-  DCMI_InitStructure.DCMI_HSPolarity = DCMI_HSPolarity_High;
+  DCMI_InitStructure.DCMI_PCKPolarity = DCMI_PCKPolarity_Rising; //trigger on rising edge
+  DCMI_InitStructure.DCMI_VSPolarity = DCMI_VSPolarity_Low;  //VSYNC Active Low
+  DCMI_InitStructure.DCMI_HSPolarity = DCMI_HSPolarity_High; //HSYNC Active High
   DCMI_InitStructure.DCMI_CaptureRate = DCMI_CaptureRate_All_Frame;
   DCMI_InitStructure.DCMI_ExtendedDataMode = DCMI_ExtendedDataMode_8b;
 
@@ -516,7 +516,7 @@ void OV9655_Init(ImageFormat_TypeDef ImageFormat)
   DMA_InitStructure.DMA_PeripheralBaseAddr = DCMI_DR_ADDRESS;	
   DMA_InitStructure.DMA_Memory0BaseAddr = FSMC_LCD_ADDRESS;
   DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
-  DMA_InitStructure.DMA_BufferSize = 1;
+  DMA_InitStructure.DMA_BufferSize = 64;
   DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
   DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Disable;
   DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
@@ -570,7 +570,7 @@ void OV9655_QQVGAConfig(void)
   uint32_t i;
 
   OV9655_Reset();
-  Delay(200);
+  Delay(20);
 
   /* Initialize OV9655 */
   for(i=0; i<(sizeof(OV9655_QQVGA)/2); i++)

@@ -17,3 +17,12 @@ RES (reset, can be disconnected, active low, internal pull-up)
 XCLK 	PA8	(6-24MHz MCO1)
 SIO_C - PB8 (i2c1)
 SIO_D - PB9 (i2c1)
+
+
+2:21pm image 1: PCLK (yellow), D2 (Green), HSYNC (blue)
+-second image with series resistor
+
+- not getting data in DR register of DCMI
+- may be caused by very noisy data lines
+- need to try adding capacitor to 3V line and series resistors to all lines (330ohms?)
+	- look up transmission reflections and why this is happening

@@ -171,13 +171,18 @@ void Display_Menu(uint8_t ForematIndex, uint8_t MaxForematIndex)
   */
 void Camera_Config(void)
 {
+	/* Configure the OV9655 camera and set the QQVGA mode */
+	OV9655_HW_Init();
+	OV9655_Init(BMP_QQVGA);
+	OV9655_QQVGAConfig();
+	/*
   if(Camera == OV9655_CAMERA)
   {
     switch (ImageFormat)
     {
       case BMP_QQVGA:
       {
-        /* Configure the OV9655 camera and set the QQVGA mode */
+        // Configure the OV9655 camera and set the QQVGA mode 
         OV9655_HW_Init();
         OV9655_Init(BMP_QQVGA);
         OV9655_QQVGAConfig();
@@ -185,7 +190,7 @@ void Camera_Config(void)
       }
       case BMP_QVGA:
       {
-        /* Configure the OV9655 camera and set set the QVGA mode */
+        // Configure the OV9655 camera and set set the QVGA mode 
         OV9655_HW_Init();
         OV9655_Init(BMP_QVGA);
         OV9655_QVGAConfig();
@@ -193,13 +198,14 @@ void Camera_Config(void)
       }
       default:
       {
-        /* Configure the OV9655 camera and set the QQVGA mode */
+        // Configure the OV9655 camera and set the QQVGA mode 
         OV9655_HW_Init();
         OV9655_Init(BMP_QQVGA);
         OV9655_QQVGAConfig();
         break;
       } 
     }
+		
   }
   else if(Camera == OV2640_CAMERA)
   {
@@ -207,7 +213,7 @@ void Camera_Config(void)
     {
       case BMP_QQVGA:
       {
-        /* Configure the OV2640 camera and set the QQVGA mode */
+        // Configure the OV2640 camera and set the QQVGA mode 
         OV2640_HW_Init();
         OV2640_Init(BMP_QQVGA);
         OV2640_QQVGAConfig();
@@ -215,7 +221,7 @@ void Camera_Config(void)
       }
       case BMP_QVGA:
       {
-        /* Configure the OV2640 camera and set the QQVGA mode */
+        // Configure the OV2640 camera and set the QQVGA mode 
         OV2640_HW_Init();
         OV2640_Init(BMP_QVGA);
         OV2640_QVGAConfig();
@@ -223,7 +229,7 @@ void Camera_Config(void)
       }
       default:
       {
-        /* Configure the OV2640 camera and set the QQVGA mode */
+        // Configure the OV2640 camera and set the QQVGA mode 
         OV2640_HW_Init();
         OV2640_Init(BMP_QQVGA);
         OV2640_QQVGAConfig();
@@ -231,6 +237,7 @@ void Camera_Config(void)
       }
     }
   }
+	*/
 }
 
 /**
