@@ -82,7 +82,7 @@ extern uint32_t SystemCoreClock;          /*!< System Clock Frequency (Core Cloc
 /** @addtogroup STM32F4xx_System_Exported_Functions
   * @{
   */
-  
+extern void DCMI_IRQHandler(void);
 extern void SystemInit(void);
 extern void SystemCoreClockUpdate(void);
 /**

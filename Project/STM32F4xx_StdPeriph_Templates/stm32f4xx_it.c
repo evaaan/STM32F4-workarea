@@ -139,6 +139,11 @@ void PendSV_Handler(void)
 {
 }
 
+void DCMI_IRQHandler(void)
+{
+Delay(10);
+}
+
 /**
   * @brief  This function handles SysTick Handler.
   * @param  None

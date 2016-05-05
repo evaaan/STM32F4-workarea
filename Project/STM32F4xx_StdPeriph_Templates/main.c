@@ -50,6 +50,10 @@ OV2640_IDTypeDef  OV2640_Camera_ID;
 __IO uint16_t  uhADCVal = 0;
 uint8_t        abuffer[40];
 uint8_t ret_val = 0x56;
+uint16_t dcmi_it;
+uint32_t c_high = 0;
+uint32_t c_low = 0;
+uint16_t on = 1;
 FlagStatus fstatus = RESET;
 ITStatus itstatus = RESET;
 extern Camera_TypeDef       Camera;
@@ -90,95 +94,54 @@ int main(void)
   STM_EVAL_LEDOn(LED1);
   STM_EVAL_LEDOn(LED3);
 
-  /* ADC configuration */
-  //ADC_Config();
-
-  /* Initializes the DCMI interface (I2C and GPIO) used to configure the camera */
-  //OV29655_HW_Init();
-	Delay(20);
-  /* Read the OV9655/OV2640 Manufacturer identifier */
-  //OV9655_ReadID(&OV9655_Camera_ID);
-  //OV2640_ReadID(&OV2640_Camera_ID);
-
 	Camera = OV9655_CAMERA;
-	/* 
-  if(OV9655_Camera_ID.PID  == 0x96)
-  {
-    Camera = OV9655_CAMERA;
-    //sprintf((char*)abuffer, "OV9655 Camera ID 0x%x", OV9655_Camera_ID.PID);
-    ValueMax = 2;
-  }
-  else if(OV2640_Camera_ID.PIDH  == 0x26)
-  {
-    Camera = OV2640_CAMERA;
-    //sprintf((char*)abuffer, "OV2640 Camera ID 0x%x", OV2640_Camera_ID.PIDH);
-    ValueMax = 2;
-  }
-  else
-  {
-    
-    //while(1);  
-  }
-	*/
 
 
-  Delay(20);
-
-  /* Initialize demo */
-//  ImageFormat = (ImageFormat_TypeDef)Demo_Init();
 
   /* Configure the Camera module mounted on STM324xG-EVAL/STM324x7I-EVAL boards */
-  Camera_Config();
+  OV9655_HW_Init(); // Initialize GPIO pins (DCMI, I2C)
+	OV9655_Init(BMP_QQVGA); // Initialize DCMI and DMA registers
+	OV9655_QQVGAConfig(); // Program OV9655 registers
 
-	Delay(20);
 
   /* Enable DMA2 stream 1 and DCMI interface then start image capture */
   DMA_Cmd(DMA2_Stream1, ENABLE); 
-	Delay(20);
+
   DCMI_Cmd(ENABLE); 
 
-  /* Insert 100ms delay: wait 100ms */
-  Delay(20); 
 
   DCMI_CaptureCmd(ENABLE); 
 
-  //LCD_ClearLine(LINE(4));
-  //Demo_LCD_Clear();
+	// Enable DCMI interrupt
+	
+	dcmi_it = DCMI_IT_VSYNC;
+	DCMI_ITConfig(dcmi_it, ENABLE);
 	
 	// lets try writing to and reading from a register
-	if (Camera == OV9655_CAMERA) {
+	/*if (Camera == OV9655_CAMERA) {
 		ret_val = OV9655_ReadReg(OV9655_COM10);
-	}
-
+	} */
+	
   while(1)
   {
-    /* Blink LD1, LED2 and LED4 */
+    // Toggle LEDs
     STM_EVAL_LEDToggle(LED1);
     STM_EVAL_LEDToggle(LED2);
     STM_EVAL_LEDToggle(LED3);
-    //STM_EVAL_LEDToggle(LED4);
-		itstatus = DCMI_GetITStatus(DCMI_IT_FRAME);
-		fstatus = DCMI_GetFlagStatus(DCMI_FLAG_FRAMERI);
-		if ((itstatus == SET) || (fstatus == SET)) {
-			Delay(100);//catch here
+    STM_EVAL_LEDToggle(LED4);
+		
+		itstatus = DCMI_GetITStatus(dcmi_it);
+		if (itstatus == SET) {
+			//Delay(100);//catch here
+			DCMI_ClearITPendingBit(dcmi_it);
 		}
-    /* Insert 100ms delay */
-    Delay(10);
-
-    /* Get the last ADC3 conversion result data */
-    //uhADCVal = ADC_GetConversionValue(ADC3);
-    
-    /* Change the Brightness of camera using "Brightness Adjustment" register:
-       For OV9655 camera Brightness can be positively (0x01 ~ 0x7F) and negatively (0x80 ~ 0xFF) adjusted
-       For OV2640 camera Brightness can be positively (0x20 ~ 0x40) and negatively (0 ~ 0x20) adjusted 
-    if(Camera == OV9655_CAMERA)
-    {
-      OV9655_BrightnessConfig(uhADCVal);
-    }
-    if(Camera == OV2640_CAMERA)
-    {
-      OV2640_BrightnessConfig(uhADCVal/2);
-    } */
+		Delay(10);
+		/*
+		if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_0) == Bit_SET) {
+			c_high++;
+		}else {
+			c_low++;
+		} */
   }
 }
 

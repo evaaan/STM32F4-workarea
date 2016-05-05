@@ -55,7 +55,7 @@ static unsigned char OV9655_QQVGA[][2]=
   0x0b, 0x57,
   0x0e, 0x61,
   0x0f, 0x40,
-  0x11, 0x01,
+  0x11, 0x0F, // COM7 (prescaler): F=FCLK/(bit[5:0]+1)
   0x12, 0x62,
   0x13, 0xc7,
   0x14, 0x3a,
@@ -375,50 +375,61 @@ void OV9655_HW_Init(void)
   /* Enable DCMI GPIOs clocks */
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOB | 
                          RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_GPIOE, ENABLE);
-
+	
+	RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_DCMI, ENABLE);
+	
   /* Connect DCMI pins to AF13 */
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource4, GPIO_AF_DCMI); // HSYNC
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource7, GPIO_AF_DCMI); // VSYNC
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_DCMI); // PCLK
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource8, GPIO_AF_MCO);  // XCLK
 	
-  
 	
   GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_DCMI); // D0
   GPIO_PinAFConfig(GPIOC, GPIO_PinSource7, GPIO_AF_DCMI); // D1
-  GPIO_PinAFConfig(GPIOC, GPIO_PinSource8, GPIO_AF_DCMI); // D2
-  GPIO_PinAFConfig(GPIOC, GPIO_PinSource9, GPIO_AF_DCMI); // D3
-  GPIO_PinAFConfig(GPIOC, GPIO_PinSource11, GPIO_AF_DCMI);// D4
+  GPIO_PinAFConfig(GPIOE, GPIO_PinSource0, GPIO_AF_DCMI); // D2
+  GPIO_PinAFConfig(GPIOE, GPIO_PinSource1, GPIO_AF_DCMI); // D3
+  GPIO_PinAFConfig(GPIOE, GPIO_PinSource4, GPIO_AF_DCMI); // D4
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource6, GPIO_AF_DCMI); // D5
   GPIO_PinAFConfig(GPIOE, GPIO_PinSource5, GPIO_AF_DCMI); // D6
   GPIO_PinAFConfig(GPIOE, GPIO_PinSource6, GPIO_AF_DCMI); // D7
   
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
   /* DCMI GPIO configuration */
   /* PA - HSYNC, PCLK, XCLK*/
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_6 | GPIO_Pin_8;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
   GPIO_Init(GPIOA, &GPIO_InitStructure);
 
   /* PB - D5 */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
-	/* PC - D0, D1, D2, D3, D4 */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_11;
+	/* PC - D0, D1 */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
-	
-	/* PE - D6, D7 */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	/* PE - D2, D3, D4, D6, D7 */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
   GPIO_Init(GPIOE, &GPIO_InitStructure);
 
 	
-	/* XCLK(PA8) - MCO 8MHz, 2x divider */
+	/* XCLK(PA8) - MCO 16MHz, 1x divider */
   //GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   //GPIO_Init(GPIOA, &GPIO_InitStructure);
-	RCC_MCO1Config(RCC_MCO1Source_HSI, RCC_MCO1Div_2);
+	RCC_MCO1Config(RCC_MCO1Source_HSI, RCC_MCO1Div_1);
 
   /****** Configures the I2C1 used for OV2640 camera module configuration *****/
  /* I2C1 clock enable */
@@ -494,14 +505,14 @@ void OV9655_Init(ImageFormat_TypeDef ImageFormat)
 
   /*** Configures the DCMI to interface with the OV9655 camera module ***/
   /* Enable DCMI clock */
-  RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_DCMI, ENABLE);
+  //RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_DCMI, ENABLE);
 
   /* DCMI configuration */ 
-  DCMI_InitStructure.DCMI_CaptureMode = DCMI_CaptureMode_Continuous;
+  DCMI_InitStructure.DCMI_CaptureMode = DCMI_CaptureMode_SnapShot;
   DCMI_InitStructure.DCMI_SynchroMode = DCMI_SynchroMode_Hardware;
   DCMI_InitStructure.DCMI_PCKPolarity = DCMI_PCKPolarity_Rising; //trigger on rising edge
-  DCMI_InitStructure.DCMI_VSPolarity = DCMI_VSPolarity_Low;  //VSYNC Active Low
-  DCMI_InitStructure.DCMI_HSPolarity = DCMI_HSPolarity_High; //HSYNC Active High
+  DCMI_InitStructure.DCMI_VSPolarity = DCMI_VSPolarity_High;  //VSYNC Active Low (data not valid when high)
+  DCMI_InitStructure.DCMI_HSPolarity = DCMI_HSPolarity_Low; //HSYNC Active High (data not valid when low)
   DCMI_InitStructure.DCMI_CaptureRate = DCMI_CaptureRate_All_Frame;
   DCMI_InitStructure.DCMI_ExtendedDataMode = DCMI_ExtendedDataMode_8b;
 
@@ -528,36 +539,14 @@ void OV9655_Init(ImageFormat_TypeDef ImageFormat)
   DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
   DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
 
-  switch(ImageFormat)
-  {
-    case BMP_QQVGA:
-    {
-      /* DCMI configuration */
-      DCMI_Init(&DCMI_InitStructure);
 
-      /* DMA2 IRQ channel Configuration */
-      DMA_Init(DMA2_Stream1, &DMA_InitStructure);
-      break;
-    }
-    case BMP_QVGA:
-    {
-      /* DCMI configuration */ 
-      DCMI_Init(&DCMI_InitStructure);
+	/* DCMI configuration */ 
+	DCMI_Init(&DCMI_InitStructure);
 
-      /* DMA2 IRQ channel Configuration */
-      DMA_Init(DMA2_Stream1, &DMA_InitStructure); 
-      break;
-    }
-    default:
-    {
-      /* DCMI configuration */ 
-      DCMI_Init(&DCMI_InitStructure);
+	/* DMA2 IRQ channel Configuration */
+	DMA_Init(DMA2_Stream1, &DMA_InitStructure);
 
-      /* DMA2 IRQ channel Configuration */
-      DMA_Init(DMA2_Stream1, &DMA_InitStructure);
-      break;
-    }
-  }    
+  
 }
 
 /**

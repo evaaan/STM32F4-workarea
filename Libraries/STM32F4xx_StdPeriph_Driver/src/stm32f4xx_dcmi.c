@@ -143,7 +143,7 @@ void DCMI_DeInit(void)
 void DCMI_Init(DCMI_InitTypeDef* DCMI_InitStruct)
 {
   uint32_t temp = 0x0;
-  
+  uint16_t it_temp = 0x0;
   /* Check the parameters */
   assert_param(IS_DCMI_CAPTURE_MODE(DCMI_InitStruct->DCMI_CaptureMode));
   assert_param(IS_DCMI_SYNCHRO(DCMI_InitStruct->DCMI_SynchroMode));
@@ -173,7 +173,8 @@ void DCMI_Init(DCMI_InitTypeDef* DCMI_InitStruct)
                      DCMI_InitStruct->DCMI_CaptureRate |
                      DCMI_InitStruct->DCMI_ExtendedDataMode);
 
-  DCMI->CR = temp;                              
+  DCMI->CR = temp;     
+
 }
 
 /**
@@ -345,6 +346,9 @@ uint32_t DCMI_ReadData(void)
 {
   return DCMI->DR;
 }
+
+
+
 /**
   * @}
   */
