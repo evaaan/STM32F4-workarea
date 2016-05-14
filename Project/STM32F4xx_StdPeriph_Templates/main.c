@@ -49,13 +49,17 @@ OV2640_IDTypeDef  OV2640_Camera_ID;
 
 __IO uint16_t  uhADCVal = 0;
 uint8_t        abuffer[40];
-uint8_t ret_val = 0x56;
 uint16_t dcmi_it;
 uint32_t c_high = 0;
 uint32_t c_low = 0;
 uint16_t on = 1;
+uint16_t j;
 FlagStatus fstatus = RESET;
 ITStatus itstatus = RESET;
+
+uint32_t screenBuffer[120*160*2/4];
+uint32_t screenBufferAddr = (uint32_t)(screenBuffer);
+
 extern Camera_TypeDef       Camera;
 extern ImageFormat_TypeDef  ImageFormat;
 extern __IO uint8_t         ValueMax;
@@ -103,19 +107,16 @@ int main(void)
 	OV9655_Init(BMP_QQVGA); // Initialize DCMI and DMA registers
 	OV9655_QQVGAConfig(); // Program OV9655 registers
 
+	
 
   /* Enable DMA2 stream 1 and DCMI interface then start image capture */
   DMA_Cmd(DMA2_Stream1, ENABLE); 
 
   DCMI_Cmd(ENABLE); 
 
-
+	Delay(100);
   DCMI_CaptureCmd(ENABLE); 
 
-	// Enable DCMI interrupt
-	
-	dcmi_it = DCMI_IT_VSYNC;
-	DCMI_ITConfig(dcmi_it, ENABLE);
 	
 	// lets try writing to and reading from a register
 	/*if (Camera == OV9655_CAMERA) {
@@ -129,19 +130,34 @@ int main(void)
     STM_EVAL_LEDToggle(LED2);
     STM_EVAL_LEDToggle(LED3);
     STM_EVAL_LEDToggle(LED4);
-		
+		/*
 		itstatus = DCMI_GetITStatus(dcmi_it);
 		if (itstatus == SET) {
 			//Delay(100);//catch here
 			DCMI_ClearITPendingBit(dcmi_it);
-		}
-		Delay(10);
-		/*
-		if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_0) == Bit_SET) {
-			c_high++;
-		}else {
-			c_low++;
 		} */
+		Delay(10);
+		
+		/*
+		// capture a single frame
+		
+		// Set VSYNC low to start frame
+		GPIO_WriteBit(GPIOB, GPIO_Pin_1, Bit_RESET);
+		
+		Delay(1);
+			// read 8 pulses of PCLK then set HSYNC high
+		for (j = 0; j < 8; j++) {
+			// Set HSYNC high while taking data
+			GPIO_WriteBit(GPIOB, GPIO_Pin_0, Bit_SET);
+			Delay(1);
+			GPIO_WriteBit(GPIOB, GPIO_Pin_0, Bit_RESET);
+			Delay(1);
+			
+		}
+		//if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_0) == Bit_SET)
+		
+		GPIO_WriteBit(GPIOB, GPIO_Pin_1, Bit_SET);
+		*/
   }
 }
 

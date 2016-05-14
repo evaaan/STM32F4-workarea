@@ -41,6 +41,7 @@
 /* Private define ------------------------------------------------------------*/
 #define  TIMEOUT  2
 
+extern uint32_t screenBufferAddr;
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* QQVGA 160x120 */
@@ -55,8 +56,8 @@ static unsigned char OV9655_QQVGA[][2]=
   0x0b, 0x57,
   0x0e, 0x61,
   0x0f, 0x40,
-  0x11, 0x0F, // COM7 (prescaler): F=FCLK/(bit[5:0]+1)
-  0x12, 0x62,
+  0x11, 0x0F, // CLKRC (prescaler): F=FCLK/(bit[5:0]+1)
+  0x12, 0x63, //COM7, RGB
   0x13, 0xc7,
   0x14, 0x3a,
 	0x15, 0x00, // COM10
@@ -87,7 +88,7 @@ static unsigned char OV9655_QQVGA[][2]=
   0x3d, 0x99,
   0x3e, 0x0e,
   0x3f, 0xc1,
-  0x40, 0xc0,
+  0x40, 0xc8, //COM15 0b11001000
   0x41, 0x41,
   0x42, 0xc0,
   0x43, 0x0a,
@@ -395,7 +396,7 @@ void OV9655_HW_Init(void)
   GPIO_PinAFConfig(GPIOE, GPIO_PinSource6, GPIO_AF_DCMI); // D7
   
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
@@ -403,6 +404,7 @@ void OV9655_HW_Init(void)
 	
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
   /* DCMI GPIO configuration */
   /* PA - HSYNC, PCLK, XCLK*/
@@ -413,14 +415,14 @@ void OV9655_HW_Init(void)
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
   GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-  /* PB - D5 */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+  /* PB - D5, VSYNC */
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
 	/* PC - D0, D1 */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	
 	/* PE - D2, D3, D4, D6, D7 */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
   GPIO_Init(GPIOE, &GPIO_InitStructure);
@@ -525,13 +527,13 @@ void OV9655_Init(ImageFormat_TypeDef ImageFormat)
 
   DMA_InitStructure.DMA_Channel = DMA_Channel_1;  
   DMA_InitStructure.DMA_PeripheralBaseAddr = DCMI_DR_ADDRESS;	
-  DMA_InitStructure.DMA_Memory0BaseAddr = FSMC_LCD_ADDRESS;
+  DMA_InitStructure.DMA_Memory0BaseAddr = screenBufferAddr;
   DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
-  DMA_InitStructure.DMA_BufferSize = 64;
+  DMA_InitStructure.DMA_BufferSize = 120*160*2/4;
   DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
   DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Disable;
   DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
-  DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+  DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Word;
   DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
   DMA_InitStructure.DMA_Priority = DMA_Priority_High;
   DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Enable;
