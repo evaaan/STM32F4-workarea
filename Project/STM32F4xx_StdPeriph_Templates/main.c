@@ -48,7 +48,6 @@ OV9655_IDTypeDef  OV9655_Camera_ID;
 OV2640_IDTypeDef  OV2640_Camera_ID;
 
 __IO uint16_t  uhADCVal = 0;
-uint8_t        abuffer[40];
 uint16_t dcmi_it;
 uint32_t c_high = 0;
 uint32_t c_low = 0;
@@ -56,7 +55,6 @@ uint16_t on = 1;
 uint16_t j;
 FlagStatus fstatus = RESET;
 ITStatus itstatus = RESET;
-
 uint32_t screenBuffer[120*160*2/4];
 uint32_t screenBufferAddr = (uint32_t)(screenBuffer);
 
@@ -125,6 +123,7 @@ int main(void)
 	
   while(1)
   {
+		c_low = screenBufferAddr;
     // Toggle LEDs
     STM_EVAL_LEDToggle(LED1);
     STM_EVAL_LEDToggle(LED2);

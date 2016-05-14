@@ -131,7 +131,7 @@ static unsigned char OV9655_QQVGA[][2]=
   0x6f, 0x9d,
   0x70, 0x21,
   0x71, 0x78,
-  0x72, 0x22,
+  0x72, 0x11,//POIDX - pixel output index
   0x73, 0x02,
   0x74, 0x10,
   0x75, 0x10,
@@ -510,7 +510,7 @@ void OV9655_Init(ImageFormat_TypeDef ImageFormat)
   //RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_DCMI, ENABLE);
 
   /* DCMI configuration */ 
-  DCMI_InitStructure.DCMI_CaptureMode = DCMI_CaptureMode_Continuous;
+  DCMI_InitStructure.DCMI_CaptureMode = DCMI_CaptureMode_SnapShot;
   DCMI_InitStructure.DCMI_SynchroMode = DCMI_SynchroMode_Hardware;
   DCMI_InitStructure.DCMI_PCKPolarity = DCMI_PCKPolarity_Rising; //trigger on rising edge
   DCMI_InitStructure.DCMI_VSPolarity = DCMI_VSPolarity_High;  //VSYNC Active Low (data not valid when high)
@@ -527,7 +527,7 @@ void OV9655_Init(ImageFormat_TypeDef ImageFormat)
 
   DMA_InitStructure.DMA_Channel = DMA_Channel_1;  
   DMA_InitStructure.DMA_PeripheralBaseAddr = DCMI_DR_ADDRESS;	
-  DMA_InitStructure.DMA_Memory0BaseAddr = 0x200002EC;//screenBufferAddr;
+  DMA_InitStructure.DMA_Memory0BaseAddr = screenBufferAddr;//screenBufferAddr;
   DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
   DMA_InitStructure.DMA_BufferSize = 120*160*2/4;
   DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
