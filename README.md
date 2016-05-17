@@ -1,3 +1,7 @@
+# ENEE408 Microcontroller-based Design
+
+This repo was forked from g4lvanix and is based heavily on several of his examples and those provided by ST. The project is found under Project/STM32F4xx_StdPeriph_Templates and was built using the yagarto toolchain. It is built to configure the STM32F4 Discovery board DMCI interface with an OV9655 chip (using a waveshare board) and send image data over a USART interface to the script in the Python Imaging folder.
+
 # STM32F4 working directory template
 
 This repo provides a full workspace to get you started with the STM32F4xx family of controllers. It is aimed at people who prefer to work without an IDE in a simple text editor and want to compile from the command line.

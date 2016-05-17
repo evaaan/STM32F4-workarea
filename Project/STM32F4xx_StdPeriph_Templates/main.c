@@ -122,11 +122,11 @@ int main(void)
 		ret_val = OV9655_ReadReg(OV9655_COM10);
 	} */
 	init_USART1(USART2_BAUDRATE*3);
-	USART_puts(USART2, "Loaded\n"); //6 chars
+	//USART_puts(USART2, "Loaded\n"); //6 chars
   while(1)
   {
 		
-		USART_puts(USART2, "Hello World\n"); // 11 chars
+		//USART_puts(USART2, "Hello World\n"); // 11 chars
 		c_low = screenBufferAddr;
     // Toggle LEDs
     STM_EVAL_LEDToggle(LED1);
