@@ -45,7 +45,7 @@ I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x57224759)
 I (..\..\..\Utilities\STM32_EVAL\Common\stm32_eval_legacy.h)(0x5722475B)
 I (..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL\../Common/fonts.h)(0x5722475B)
 I (..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL\stm324x7i_eval_ioe.h)(0x5722475C)
-F (..\main.c)(0x5736B316)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I..\ -I..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I..\..\..\Utilities\STM32_EVAL\Common -I..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F4xx -DUSE_STM324x7I_EVAL -DSTM32F427X -DUSE_STDPERIPH_DRIVER -o ".\STM324x7I_EVAL\main.o" --omf_browse ".\STM324x7I_EVAL\main.crf" --depend ".\STM324x7I_EVAL\main.d")
+F (..\main.c)(0x5737B195)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I..\ -I..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I..\..\..\Utilities\STM32_EVAL\Common -I..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F4xx -DUSE_STM324x7I_EVAL -DSTM32F427X -DUSE_STDPERIPH_DRIVER -o ".\STM324x7I_EVAL\main.o" --omf_browse ".\STM324x7I_EVAL\main.crf" --depend ".\STM324x7I_EVAL\main.d")
 I (..\main.h)(0x5722475A)
 I (..\camera_api.h)(0x5722475A)
 I (..\..\..\Utilities\STM32_EVAL\Common\lcd_log.h)(0x5722475B)
@@ -92,6 +92,7 @@ I (..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL\../Common/fonts.h)(0x5722475B)
 I (..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL\stm324x7i_eval_ioe.h)(0x5722475C)
 I (..\dcmi_ov9655.h)(0x5722475A)
 I (..\dcmi_ov2640.h)(0x5722475A)
+I (..\usart.h)(0x572AA399)
 F (..\camera_api.c)(0x5734DB7E)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I..\ -I..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I..\..\..\Utilities\STM32_EVAL\Common -I..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F4xx -DUSE_STM324x7I_EVAL -DSTM32F427X -DUSE_STDPERIPH_DRIVER -o ".\STM324x7I_EVAL\camera_api.o" --omf_browse ".\STM324x7I_EVAL\camera_api.crf" --depend ".\STM324x7I_EVAL\camera_api.d")
 I (..\camera_api.h)(0x5722475A)
 I (..\..\..\Utilities\STM32_EVAL\Common\lcd_log.h)(0x5722475B)
@@ -185,7 +186,7 @@ I (..\..\..\Utilities\STM32_EVAL\Common\stm32_eval_legacy.h)(0x5722475B)
 I (..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL\../Common/fonts.h)(0x5722475B)
 I (..\main.h)(0x5722475A)
 I (..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL\stm324x7i_eval_ioe.h)(0x5722475C)
-F (..\dcmi_ov9655.c)(0x5736B317)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I..\ -I..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I..\..\..\Utilities\STM32_EVAL\Common -I..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F4xx -DUSE_STM324x7I_EVAL -DSTM32F427X -DUSE_STDPERIPH_DRIVER -o ".\STM324x7I_EVAL\dcmi_ov9655.o" --omf_browse ".\STM324x7I_EVAL\dcmi_ov9655.crf" --depend ".\STM324x7I_EVAL\dcmi_ov9655.d")
+F (..\dcmi_ov9655.c)(0x5737A762)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I..\ -I..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I..\..\..\Utilities\STM32_EVAL\Common -I..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F4xx -DUSE_STM324x7I_EVAL -DSTM32F427X -DUSE_STDPERIPH_DRIVER -o ".\STM324x7I_EVAL\dcmi_ov9655.o" --omf_browse ".\STM324x7I_EVAL\dcmi_ov9655.crf" --depend ".\STM324x7I_EVAL\dcmi_ov9655.d")
 I (..\dcmi_ov9655.h)(0x5722475A)
 I (..\camera_api.h)(0x5722475A)
 I (..\..\..\Utilities\STM32_EVAL\Common\lcd_log.h)(0x5722475B)
@@ -231,6 +232,42 @@ I (..\..\..\Utilities\STM32_EVAL\Common\stm32_eval_legacy.h)(0x5722475B)
 I (..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL\../Common/fonts.h)(0x5722475B)
 I (..\main.h)(0x5722475A)
 I (..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL\stm324x7i_eval_ioe.h)(0x5722475C)
+F (..\usart.c)(0x5737B17F)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I..\ -I..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I..\..\..\Utilities\STM32_EVAL\Common -I..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F4xx -DUSE_STM324x7I_EVAL -DSTM32F427X -DUSE_STDPERIPH_DRIVER -o ".\STM324x7I_EVAL\usart.o" --omf_browse ".\STM324x7I_EVAL\usart.crf" --depend ".\STM324x7I_EVAL\usart.d")
+I (..\usart.h)(0x572AA399)
+I (..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5722474E)
+I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x5006D242)
+I (C:\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x4EB17B44)
+I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x505A054C)
+I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x4FDB3D1C)
+I (C:\Keil\ARM\CMSIS\Include\core_cm4_simd.h)(0x4F58F3B6)
+I (..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x57298DBF)
+I (..\stm32f4xx_conf.h)(0x5722475A)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_adc.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_crc.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_cryp.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dbgmcu.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_exti.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_flash.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_hash.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_gpio.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_i2c.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_iwdg.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_pwr.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rcc.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rng.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rtc.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sdio.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_spi.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_syscfg.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_tim.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x57224759)
+I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x57224759)
 F (..\..\..\Utilities\STM32_EVAL\STM3240_41_G_EVAL\stm324xg_eval_lcd.c)(0x5722475B)()
 F (..\..\..\Utilities\STM32_EVAL\STM3240_41_G_EVAL\stm324xg_eval.c)(0x5722475B)()
 F (..\..\..\Utilities\STM32_EVAL\STM3240_41_G_EVAL\stm324xg_eval_ioe.c)(0x5722475B)()
@@ -1473,7 +1510,7 @@ I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_syscfg.h)(0x57224
 I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_tim.h)(0x57224759)
 I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x57224759)
 I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x57224759)
-F (..\system_stm32f4xx.c)(0x57298FE9)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I..\ -I..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I..\..\..\Utilities\STM32_EVAL\Common -I..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F4xx -DUSE_STM324x7I_EVAL -DSTM32F427X -DUSE_STDPERIPH_DRIVER -o ".\STM324x7I_EVAL\system_stm32f4xx.o" --omf_browse ".\STM324x7I_EVAL\system_stm32f4xx.crf" --depend ".\STM324x7I_EVAL\system_stm32f4xx.d")
+F (..\system_stm32f4xx.c)(0x573793D8)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I..\ -I..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include -I..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc -I..\..\..\Utilities\STM32_EVAL\Common -I..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F4xx -DUSE_STM324x7I_EVAL -DSTM32F427X -DUSE_STDPERIPH_DRIVER -o ".\STM324x7I_EVAL\system_stm32f4xx.o" --omf_browse ".\STM324x7I_EVAL\system_stm32f4xx.crf" --depend ".\STM324x7I_EVAL\system_stm32f4xx.d")
 I (..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5722474E)
 I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x5006D242)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x4EB17B44)
@@ -1508,4 +1545,4 @@ I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_tim.h)(0x57224759
 I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x57224759)
 I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x57224759)
 I (..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x57224759)
-F (..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f40xx.s)(0x57298F76)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1" -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F4xx --list ".\STM324x7I_EVAL\startup_stm32f40xx.lst" --xref -o ".\STM324x7I_EVAL\startup_stm32f40xx.o" --depend ".\STM324x7I_EVAL\startup_stm32f40xx.d")
+F (..\..\..\Libraries\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f40xx.s)(0x573777AF)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1" -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\ST\STM32F4xx --list ".\STM324x7I_EVAL\startup_stm32f40xx.lst" --xref -o ".\STM324x7I_EVAL\startup_stm32f40xx.o" --depend ".\STM324x7I_EVAL\startup_stm32f40xx.d")

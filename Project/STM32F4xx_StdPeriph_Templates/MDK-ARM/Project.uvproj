@@ -416,6 +416,11 @@
               <FileType>1</FileType>
               <FilePath>..\dcmi_ov9655.c</FilePath>
             </File>
+            <File>
+              <FileName>usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1150,6 +1155,11 @@
               <FileName>dcmi_ov9655.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\dcmi_ov9655.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\usart.c</FilePath>
             </File>
           </Files>
         </Group>

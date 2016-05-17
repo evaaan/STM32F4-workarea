@@ -30,6 +30,9 @@
 #include "dcmi_ov9655.h"
 #include "dcmi_ov2640.h"
 #include  "lcd_log.h"
+#include "usart.h"
+
+#define USART2_BAUDRATE 115200
 
 /** @addtogroup STM32F4xx_StdPeriph_Examples
   * @{
@@ -47,6 +50,7 @@ RCC_ClocksTypeDef RCC_Clocks;
 OV9655_IDTypeDef  OV9655_Camera_ID;
 OV2640_IDTypeDef  OV2640_Camera_ID;
 
+
 __IO uint16_t  uhADCVal = 0;
 uint16_t dcmi_it;
 uint32_t c_high = 0;
@@ -55,7 +59,7 @@ uint16_t on = 1;
 uint16_t j;
 FlagStatus fstatus = RESET;
 ITStatus itstatus = RESET;
-uint32_t screenBuffer[120*160*2/4];
+uint8_t screenBuffer[120*160*2+1];
 uint32_t screenBufferAddr = (uint32_t)(screenBuffer);
 
 extern Camera_TypeDef       Camera;
@@ -64,7 +68,6 @@ extern __IO uint8_t         ValueMax;
 extern const uint8_t *      ImageForematArray[];
 
 /* Private function prototypes -----------------------------------------------*/
-//static void ADC_Config(void);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -105,24 +108,25 @@ int main(void)
 	OV9655_Init(BMP_QQVGA); // Initialize DCMI and DMA registers
 	OV9655_QQVGAConfig(); // Program OV9655 registers
 
-	
 
   /* Enable DMA2 stream 1 and DCMI interface then start image capture */
   DMA_Cmd(DMA2_Stream1, ENABLE); 
 
   DCMI_Cmd(ENABLE); 
 
-	Delay(100);
+	Delay(10);
   DCMI_CaptureCmd(ENABLE); 
 
-	
 	// lets try writing to and reading from a register
 	/*if (Camera == OV9655_CAMERA) {
 		ret_val = OV9655_ReadReg(OV9655_COM10);
 	} */
-	
+	init_USART1(USART2_BAUDRATE*3);
+	USART_puts(USART2, "Loaded\n"); //6 chars
   while(1)
   {
+		
+		USART_puts(USART2, "Hello World\n"); // 11 chars
 		c_low = screenBufferAddr;
     // Toggle LEDs
     STM_EVAL_LEDToggle(LED1);
@@ -136,79 +140,11 @@ int main(void)
 			DCMI_ClearITPendingBit(dcmi_it);
 		} */
 		Delay(10);
-		
-		/*
-		// capture a single frame
-		
-		// Set VSYNC low to start frame
-		GPIO_WriteBit(GPIOB, GPIO_Pin_1, Bit_RESET);
-		
-		Delay(1);
-			// read 8 pulses of PCLK then set HSYNC high
-		for (j = 0; j < 8; j++) {
-			// Set HSYNC high while taking data
-			GPIO_WriteBit(GPIOB, GPIO_Pin_0, Bit_SET);
-			Delay(1);
-			GPIO_WriteBit(GPIOB, GPIO_Pin_0, Bit_RESET);
-			Delay(1);
-			
-		}
-		//if (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_0) == Bit_SET)
-		
-		GPIO_WriteBit(GPIOB, GPIO_Pin_1, Bit_SET);
-		*/
   }
 }
 
-/**
-  * @brief  Configures the ADC.
-  * @param  None
-  * @retval None
-  */
-static void ADC_Config(void)
-{
-  ADC_InitTypeDef ADC_InitStructure;
-  ADC_CommonInitTypeDef ADC_CommonInitStructure;
-  GPIO_InitTypeDef GPIO_InitStructure;
 
-  /* Enable ADC3 clock */
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC3, ENABLE);
 
-  /* GPIOF clock enable */
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE); 
-
-  /* Configure ADC Channel7 as analog */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9; 
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
-  GPIO_Init(GPIOF, &GPIO_InitStructure);
-
-  /* ADC Common Init */
-  ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
-  ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div6;
-  ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-  ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles; 
-  ADC_CommonInit(&ADC_CommonInitStructure); 
-
-  /* ADC3 Configuration ------------------------------------------------------*/
-  ADC_StructInit(&ADC_InitStructure);
-  ADC_InitStructure.ADC_Resolution = ADC_Resolution_8b;
-  ADC_InitStructure.ADC_ScanConvMode = DISABLE;
-  ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
-  ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None; 
-  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
-  ADC_InitStructure.ADC_NbrOfConversion = 1;
-  ADC_Init(ADC3, &ADC_InitStructure);
-
-  /* ADC3 Regular Channel Config */
-  ADC_RegularChannelConfig(ADC3, ADC_Channel_7, 1, ADC_SampleTime_56Cycles);
-
-  /* Enable ADC3 */
-  ADC_Cmd(ADC3, ENABLE);
-
-  /* ADC3 regular Software Start Conv */ 
-  ADC_SoftwareStartConv(ADC3);
-}
 
 #ifdef  USE_FULL_ASSERT
 /**

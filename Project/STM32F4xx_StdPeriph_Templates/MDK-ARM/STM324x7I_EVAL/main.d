@@ -47,3 +47,4 @@
 .\STM324x7I_EVAL\main.o: ..\..\..\Utilities\STM32_EVAL\STM324x7I_EVAL\stm324x7i_eval_ioe.h
 .\STM324x7I_EVAL\main.o: ..\dcmi_ov9655.h
 .\STM324x7I_EVAL\main.o: ..\dcmi_ov2640.h
+.\STM324x7I_EVAL\main.o: ..\usart.h
